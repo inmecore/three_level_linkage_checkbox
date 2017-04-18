@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Three-level-linkage</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/three_level_linkage.css" rel="stylesheet">
+    <link href="css/check_box.css" rel="stylesheet">
+    <style>
+        .center{
+            margin-top:10%;
+            margin-left:30%
+        }
+    </style>
+</head>
+<body>
+
+<div class="center">
+    <a href="javascript:void(0);" class="btn btn-default"  data-toggle="modal" data-target="#my_modal">有种点我</a>
+</div>
+<!--model-->
+<div id="my_modal" class="modal fade" aria-hidden="true">
+    <div class="modal-dialog  modal-lg" style="width: 940px;">
+        <div class="modal-content ">
+            <div class="modal-header ">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">三级联动</h4>
+            </div>
+            <div class="modal-body" style="padding: 0">
+                <div class="wareSort clearfix" id="sort_container">
+                    <ul id="sort1"></ul>
+                    <ul id="sort2" style="display: none;"></ul>
+                    <ul id="sort3" style="display: none;"></ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">取消</button>
+                <button id="assign_sure_btn" class="btn btn-primary" tabindex="5" onclick="App.Sure.SureClick()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/three_level_linkage_checkbox.js"></script>
+<script type="text/javascript" src="js/sure.js"></script>
