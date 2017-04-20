@@ -1,5 +1,6 @@
 (function () {
     "use strict";
+    // console.log(schoolid);
     //Global define
     if (typeof App != "object") {
         window.App = {};
@@ -52,14 +53,40 @@
         "expressSecond":"",
         "expressThird":"",
         "arrow" : " <font>&gt;</font> ",
-        init:function (first_data,second_data,third_data) {
+        "sort_container":"#sort_container",
+        "sort1_id":"#sort1",
+        "sort2_id":"#sort2",
+        "sort3_id":"#sort3",
+        init:function (first_data,second_data,third_data,id1,id2,id3) {
             /**
              * 初始化数据
              */
+            if(id1){
+                App.ThreeLevelLinkageCheckbox.sort1_id = id1;
+            }else{
+                App.ThreeLevelLinkageCheckbox.sort1_id = "#sort1";
+            }
+            if(id2){
+                App.ThreeLevelLinkageCheckbox.sort2_id = id2;
+            }else{
+                App.ThreeLevelLinkageCheckbox.sort2_id = "#sort2";
+            }
+            if(id3){
+                App.ThreeLevelLinkageCheckbox.sort3_id = id3;
+            }else{
+                App.ThreeLevelLinkageCheckbox.sort3_id = "#sort3";
+            }
+
             App.ThreeLevelLinkageCheckbox.first_data = first_data;
             App.ThreeLevelLinkageCheckbox.second_data = second_data;
             App.ThreeLevelLinkageCheckbox.third_data = third_data;
             App.ThreeLevelLinkageCheckbox.InitFirstCheckbox();
+        },
+        InitSortId:function (container,id1,id2,id3) {
+            App.ThreeLevelLinkageCheckbox.sort_container = container;
+            App.ThreeLevelLinkageCheckbox.sort1_id = id1;
+            App.ThreeLevelLinkageCheckbox.sort2_id = id2;
+            App.ThreeLevelLinkageCheckbox.sort3_id = id3;
         },
         InitFirstCheckbox:function () {
             /**
@@ -70,17 +97,36 @@
             var first_data_len = App.ThreeLevelLinkageCheckbox.first_data.length;
             var firstCont = "";
             for (var i=0; i<first_data_len; i++) {
-                firstCont += '<li onClick="App.ThreeLevelLinkageCheckbox.InitSecondCheckbox(' + i + ');">'+
-                    '<a href="javascript:void(0)">'+
-                    '<input type="checkbox" id="checkbox-1-'+i+ '\" class="regular-checkbox" onclick="App.ThreeLevelLinkageCheckbox.FirstCheckboxClick('+i+')"/>'+
-                    '<label for="checkbox-1-'+i+'\"></label>'+
-                    '<span>'+App.ThreeLevelLinkageCheckbox.first_data[i].name + '</span>' +
-                    '</a>' +
-                    '</li>';
+                if(App.ThreeLevelLinkageCheckbox.first_data[i].status === "checked"){
+                    firstCont += '<li onClick="App.ThreeLevelLinkageCheckbox.InitSecondCheckbox(' + i + ');">'+
+                        '<a href="javascript:void(0)">'+
+                        '<input type="checkbox" id="checkbox-1-'+i+ '\" class="regular-checkbox" checked="checked"  onclick="App.ThreeLevelLinkageCheckbox.FirstCheckboxClick('+i+')"/>'+
+                        '<label for="checkbox-1-'+i+'\"></label>'+
+                        '<span>'+App.ThreeLevelLinkageCheckbox.first_data[i].name + '</span>' +
+                        '</a>' +
+                        '</li>';
+                }else if(App.ThreeLevelLinkageCheckbox.first_data[i].status === "half_checked"){
+                    firstCont += '<li onClick="App.ThreeLevelLinkageCheckbox.InitSecondCheckbox(' + i + ');">'+
+                        '<a href="javascript:void(0)">'+
+                        '<input type="checkbox" id="checkbox-1-'+i+ '\" class="regular-checkbox"  onclick="App.ThreeLevelLinkageCheckbox.FirstCheckboxClick('+i+')"/>'+
+                        '<label for="checkbox-1-'+i+'\"  style="background-color: #bcd3d3"></label>'+
+                        '<span>'+App.ThreeLevelLinkageCheckbox.first_data[i].name + '</span>' +
+                        '</a>' +
+                        '</li>';
+                }else{
+                    firstCont += '<li onClick="App.ThreeLevelLinkageCheckbox.InitSecondCheckbox(' + i + ');">'+
+                        '<a href="javascript:void(0)">'+
+                        '<input type="checkbox" id="checkbox-1-'+i+ '\" class="regular-checkbox" onclick="App.ThreeLevelLinkageCheckbox.FirstCheckboxClick('+i+')"/>'+
+                        '<label for="checkbox-1-'+i+'\"></label>'+
+                        '<span>'+App.ThreeLevelLinkageCheckbox.first_data[i].name + '</span>' +
+                        '</a>' +
+                        '</li>';
+                }
+
 
             }
-            $("#sort1").html(firstCont);
-            $("#sort1 label").click(function(event){
+            $(App.ThreeLevelLinkageCheckbox.sort1_id).html(firstCont);
+            $(App.ThreeLevelLinkageCheckbox.sort1_id+" label").click(function(event){
                 event.stopPropagation();
             });
         },
@@ -117,13 +163,13 @@
                         '</li>';
                 }
             }
-            $("#sort2").html(secondCont).show();
-            $("#sort3").hide();
-            $("#sort1 li").eq(i).addClass("active").siblings("li").removeClass("active");
+            $(App.ThreeLevelLinkageCheckbox.sort2_id).html(secondCont).show();
+            $(App.ThreeLevelLinkageCheckbox.sort3_id).hide();
+            $(App.ThreeLevelLinkageCheckbox.sort1_id +" li").eq(i).addClass("active").siblings("li").removeClass("active");
             App.ThreeLevelLinkageCheckbox.expressFirst = App.ThreeLevelLinkageCheckbox.first_data[i];
             $("#selectedSort").html(App.ThreeLevelLinkageCheckbox.expressFirst);
 
-            $("#sort2 label").click(function(event){
+            $(App.ThreeLevelLinkageCheckbox.sort2_id +" label").click(function(event){
                 //阻止事件冒泡
                 event.stopPropagation();
             });
@@ -155,18 +201,18 @@
                 }
             }
 
-            $("#sort3").html(thirdCont).show();
-            $("#sort2 li").eq(j).addClass("active").siblings("li").removeClass("active");
+            $(App.ThreeLevelLinkageCheckbox.sort3_id).html(thirdCont).show();
+            $(App.ThreeLevelLinkageCheckbox.sort2_id +" li").eq(j).addClass("active").siblings("li").removeClass("active");
             App.ThreeLevelLinkageCheckbox.expressSecond = App.ThreeLevelLinkageCheckbox.expressFirst + App.ThreeLevelLinkageCheckbox.arrow + App.ThreeLevelLinkageCheckbox.second_data[i][j];
             $("#selectedSort").html(App.ThreeLevelLinkageCheckbox.expressSecond);
 
-            $("#sort3 label").click(function(event){
+            $(App.ThreeLevelLinkageCheckbox.sort3_id+" label").click(function(event){
                 //阻止事件冒泡
                 event.stopPropagation();
             });
         },
         InitForthCheckbox:function (i,j,k) {
-            $("#sort3 li").eq(k).addClass("active").siblings("li").removeClass("active");
+            $(App.ThreeLevelLinkageCheckbox.sort3_id+" li").eq(k).addClass("active").siblings("li").removeClass("active");
             // expressD = expressC + arrow + district[i][j][k];
             // $("#selectedSort").html(expressD);
         },
@@ -239,7 +285,7 @@
              * 如果全部未选中，对应一级修改成未选中，
              * 如果半选中，对应一级修改成半选中
              ***************************************************************************/
-            //先修改对应三级数据状态
+                //先修改对应三级数据状态
             var third_data_i_j_len = App.ThreeLevelLinkageCheckbox.third_data[i][j].length;
             if(third_data_i_j_len > 0){
                 //对应三级有数据
@@ -377,54 +423,43 @@
                 $(checkbox_1_id).prop("checked",false);
                 $(checkbox_1_id).next().css("background-color", "#bcd3d3")
             }
-        },
-        GetDefaultData:function () {
-            var first = [{"_id":"1001","name":"教育","status":"unchecked"}];
-            var second = [
-                [
-                    {"_id":"2001","name":"教材","status":"unchecked"},
-                    {"_id":"2002","name":"外语","status":"unchecked"},
-                    {"_id":"2003","name":"考试","status":"unchecked"}
-                ]
-            ];
-            var third = [
-                [
-                    [
-                        {"_id":"3001","name":"研究生/本科","status":"unchecked"},
-                        {"_id":"3002","name":"高职高专","status":"unchecked"},
-                        {"_id":"3003","name":"中职中专","status":"unchecked"}
-                    ],
-                    [
-                        {"_id":"3011","name":"英语综合教程","status":"unchecked"},
-                        {"_id":"3012","name":"英语专项训练","status":"unchecked"},
-                        {"_id":"3013","name":"英语读物","status":"unchecked"}
-                    ],
-                    [
-                        {"_id":"3021","name":"学历考试","status":"unchecked"},
-                        {"_id":"3022","name":"公职","status":"unchecked"},
-                        {"_id":"3023","name":"财税外贸保险","status":"unchecked"},
-                        {"_id":"3024","name":"建筑工程","status":"unchecked"},
-                        {"_id":"3025","name":"计算机","status":"unchecked"},
-                        {"_id":"3016","name":"医药卫生","status":"unchecked"},
-                        {"_id":"3027","name":"艺术/体育","status":"unchecked"},
-                        {"_id":"3028","name":"考研","status":"unchecked"},
-                        {"_id":"3029","name":"公务员","status":"unchecked"}
-                    ]
-                ]
-            ];
-            return {first:first,second:second,third:third}
-        },
-        GetChangeData:function () {
-            return {
-                first:App.ThreeLevelLinkageCheckbox.first_data,
-                second:App.ThreeLevelLinkageCheckbox.second_data,
-                third:App.ThreeLevelLinkageCheckbox.third_data
-            }
         }
     };
     //执行初始化函数
-    $(function () {
-        var data = App.ThreeLevelLinkageCheckbox.GetDefaultData();
-        App.ThreeLevelLinkageCheckbox.init(data.first,data.second,data.third);
-    });
+     $(function () {
+     var first = [{"_id":"1001","name":"教育","status":"unchecked"}];
+     var second = [
+     [
+     {"_id":"2001","name":"教材","status":"unchecked"},
+     {"_id":"2002","name":"外语","status":"unchecked"},
+     {"_id":"2003","name":"考试","status":"unchecked"}
+     ]
+     ];
+     var third = [
+     [
+     [
+     {"_id":"3001","name":"研究生/本科","status":"unchecked"},
+     {"_id":"3002","name":"高职高专","status":"unchecked"},
+     {"_id":"3003","name":"中职中专","status":"unchecked"}
+     ],
+     [
+     {"_id":"3011","name":"英语综合教程","status":"unchecked"},
+     {"_id":"3012","name":"英语专项训练","status":"unchecked"},
+     {"_id":"3013","name":"英语读物","status":"unchecked"}
+     ],
+     [
+     {"_id":"3021","name":"学历考试","status":"unchecked"},
+     {"_id":"3022","name":"公职","status":"unchecked"},
+     {"_id":"3023","name":"财税外贸保险","status":"unchecked"},
+     {"_id":"3024","name":"建筑工程","status":"unchecked"},
+     {"_id":"3025","name":"计算机","status":"unchecked"},
+     {"_id":"3016","name":"医药卫生","status":"unchecked"},
+     {"_id":"3027","name":"艺术/体育","status":"unchecked"},
+     {"_id":"3028","name":"考研","status":"unchecked"},
+     {"_id":"3029","name":"公务员","status":"unchecked"}
+     ]
+     ]
+     ];
+     App.ThreeLevelLinkageCheckbox.init(first,second,third);
+     });
 }());
